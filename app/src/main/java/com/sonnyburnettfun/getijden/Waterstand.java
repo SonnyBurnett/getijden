@@ -6,8 +6,8 @@ public class Waterstand {
     String year;
     String date;
     String time;
-    String tide;
-    String val;
+    String tide;  // HW=vloed of LW=eb
+    String val;   // cm tov NAP
 
 
     public Waterstand(String year, String date, String time, String tide, String val) {
