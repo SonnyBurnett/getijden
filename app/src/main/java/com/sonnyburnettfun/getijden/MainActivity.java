@@ -24,46 +24,52 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        totaal = findViewById(R.id.totaal);
+        identifyMainActivityFields();
 
+        List<Waterstand> waterstanden = JSONfile.getWaterstanden(getApplicationContext(), "bergen");
+        List<Waterstand> ijmuiden = JSONfile.getWaterstanden(getApplicationContext(), "ijmuiden");
+        List<Waterstand> denhelder = JSONfile.getWaterstanden(getApplicationContext(), "denhelder");
+        List<Waterstand> texel = JSONfile.getWaterstanden(getApplicationContext(), "texel");
+        List<Waterstand> bergen = Tides.estimateBergenTides(ijmuiden, denhelder);
+
+        String plaats = "IJmuiden";
+        String jaar = DatumTijd.getTodayYear();
+
+        String dagString = DatumTijd.getDateString(DatumTijd.getToday());
+        String tijdString = DatumTijd.getTimeString(DatumTijd.getTodayTime());
+
+        int previousTideIndex = Tides.getPreviousTide(jaar, dagString, tijdString, ijmuiden);
+        int nextTideIndex = previousTideIndex+1;
+
+        setActivityFields(ijmuiden, jaar, plaats, dagString, tijdString, previousTideIndex, nextTideIndex);
+
+    }
+
+
+    public void identifyMainActivityFields() {
+        totaal = findViewById(R.id.totaal);
         jaarbutton = findViewById(R.id.jaarbutton);
         dagbutton = findViewById(R.id.dagbutton);
         maandbutton = findViewById(R.id.maandbutton);
         uurbutton = findViewById(R.id.uurbutton);
         minuutbutton = findViewById(R.id.minuutbutton);
         plaatsbutton = findViewById(R.id.plaatsbutton);
-
         prevtidename = findViewById(R.id.tideprevname);
         nowtidename = findViewById(R.id.tidenowname);
         nexttidename = findViewById(R.id.tidenextname);
-
         prevtidetime = findViewById(R.id.tideprevtime);
         nowtidetime = findViewById(R.id.tidenowtime);
         nexttidetime = findViewById(R.id.tidenexttime);
-
         prevtidehight = findViewById(R.id.tideprevhight);
         nowtidehight = findViewById(R.id.tidenowhight);
         nexttidehight = findViewById(R.id.tidenexthight);
-
-        List<Waterstand> waterstanden = JSONfile.getWaterstanden(getApplicationContext(), "bergen");
-        List<Waterstand> ijmuiden = JSONfile.getWaterstanden(getApplicationContext(), "ijmuiden");
-        List<Waterstand> denhelder = JSONfile.getWaterstanden(getApplicationContext(), "denhelder");
-        List<Waterstand> bergen = Tides.estimateBergenTides(ijmuiden, denhelder);
+    }
 
 
-        String dagString = DatumTijd.getDateString(DatumTijd.getToday());
-        String tijdString = DatumTijd.getTimeString(DatumTijd.getTodayTime());
-
-        int previousTideIndex = Tides.getPreviousTide(dagString, tijdString, waterstanden);
-        int nextTideIndex = previousTideIndex+1;
-
-        Tides.logPrintTide(waterstanden.get(previousTideIndex));
-        Log.e("msg","Nu is het: " + dagString + " " + tijdString);
-        Tides.logPrintTide(waterstanden.get(nextTideIndex));
-
-        plaatsbutton.setText("Bergen");
+    public void setActivityFields(List<Waterstand> waterstanden, String jaar, String plaats, String dagString, String tijdString, int previousTideIndex, int nextTideIndex) {
+        plaatsbutton.setText(plaats);
         plaatsbutton.setBackgroundColor(Color.parseColor("#f1948a"));
-        jaarbutton.setText("2020");
+        jaarbutton.setText(jaar);
         jaarbutton.setBackgroundColor(Color.parseColor("#f1948a"));
 
         totaal.setBackgroundColor(Color.parseColor("#839192"));
@@ -118,10 +124,7 @@ public class MainActivity extends AppCompatActivity {
         nowtidename.setText("NU");
         nexttidehight.setText(waterstanden.get(nextTideIndex).val);
 
-
-
     }
-
 
 
 }

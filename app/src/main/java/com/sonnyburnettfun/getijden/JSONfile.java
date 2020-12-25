@@ -70,7 +70,7 @@ public class JSONfile {
     }
 
     static List<Waterstand> getWaterstanden(Context con, String plaats) {
-        String fileNaam = "getijden2020.json";
+        String fileNaam = "";
 
         Log.e("msg", "plaats is: " + plaats);
 
@@ -79,16 +79,14 @@ public class JSONfile {
                 fileNaam = "getijden2020.json";
                 break;
             case "texel":
-                fileNaam = "texel2020.json";
+                fileNaam = "texel2021.json";
                 break;
             case "ijmuiden":
-                fileNaam = "ijmuiden2020.json";
+                fileNaam = "ijmuiden2021.json";
                 break;
             case "denhelder":
-                fileNaam = "denhelder2020.json";
+                fileNaam = "denhelder2021.json";
                 break;
-            default:
-                fileNaam = "getijden2020.json";
         }
 
         Log.e("msg", "filenaam is: " + fileNaam);

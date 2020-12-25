@@ -4,6 +4,7 @@ import android.os.Build;
 import android.util.Log;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
@@ -17,6 +18,21 @@ public class DatumTijd {
         return null;
     }
 
+    static LocalDateTime getTodayFull() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime nowDate = LocalDateTime.now();
+            return nowDate;
+        }
+        return null;
+    }
+
+    static String getTodayYear() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+             return Integer.toString(LocalDate.now().getYear());
+        }
+        return null;
+    }
+
     static LocalTime getTodayTime() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             LocalTime nowTime = LocalTime.now();
@@ -24,6 +40,24 @@ public class DatumTijd {
         }
         return null;
     }
+
+
+    static String getMonth(String datum) {
+        return datum.substring(0,2);
+    }
+
+    static String getDay(String datum) {
+        return datum.substring(2,4);
+    }
+
+    static String getHours(String tijd) {
+        return tijd.substring(0,2);
+    }
+
+    static String getMinutes(String tijd) {
+        return tijd.substring(2,4);
+    }
+
 
     static String getTimeString(LocalTime tijd) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -45,12 +79,24 @@ public class DatumTijd {
         return null;
     }
 
-    static boolean isTimeLaterThanTime(String time1, String time2) {
-        if (Integer.parseInt(time1)+10000 > Integer.parseInt(time2)+10000) {
-            return true;
+    static LocalDateTime makeItLocalDateTime(String jaar, String datum, String tijd ) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            return LocalDateTime.parse(jaar+"-"+getMonth(datum)+"-"+getDay(datum)+"T"+getHours(tijd)+":"+getMinutes(tijd)+":00");
         }
-        return false;
+        return null;
     }
+
+    static boolean isTimeearlierThanTime(Waterstand w, LocalDateTime now) {
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime d1 = makeItLocalDateTime(w.year,w.date,w.time);
+            if (d1.isAfter(now)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     static int timeDiffinMinutes(String time1, String time2) {
         int verschil = -1;

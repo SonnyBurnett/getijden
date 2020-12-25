@@ -24,35 +24,44 @@ public class Tides {
 
 
 
-    static int getPreviousTide(String nuDatum, String nuTijd, List<Waterstand> tides) {
+    static int getPreviousTide(String jaar, String nuDatum, String nuTijd, List<Waterstand> tides) {
 
-        int firstIndexDate = Tides.getIndexofFirstTide(tides, nuDatum);
+        int firstIndexDate = 0;
 
-        if (DatumTijd.isTimeLaterThanTime(tides.get(firstIndexDate).time, nuTijd)) {
-            Log.e("msg", "De vorige tide was gisteren");
-            return firstIndexDate-1;
+        while (!tides.get(firstIndexDate).year.equals(jaar) && firstIndexDate < tides.size()) {
+            firstIndexDate++;
         }
-        int i = firstIndexDate;
 
-        while (tides.get(i).date.equals(nuDatum)) {
-            if (DatumTijd.isTimeLaterThanTime(tides.get(i).time, nuTijd)) {
-                return (i-1);
-            }
-            i++;
+        while (firstIndexDate < tides.size() && !tides.get(firstIndexDate).date.equals((nuDatum))) {
+            firstIndexDate++;
         }
-        Log.e("msg", "De vorige tide is de laatste van deze dag");
-        return i;
+
+        while (DatumTijd.isTimeearlierThanTime(tides.get(firstIndexDate), DatumTijd.getTodayFull())) {
+            Log.e("msg", tides.get(firstIndexDate).time + " is eerder dan " + nuTijd + " doorzoeken");
+            firstIndexDate++;
+        }
+        Log.e("msg", tides.get(firstIndexDate).time + " is later dan " + nuTijd + " dit is de volgende");
+        Log.e("msg", tides.get(firstIndexDate-1).time + " is eerder dan " + nuTijd + " dit is de vorige");
+
+
+        return (firstIndexDate-1);
+
     }
+
 
     static void logPrintTide(Waterstand tide) {
         Log.e("data", tide.year+ " " + tide.date + " " + tide.time + " " + tide.tide + " " + tide.val);
     }
+
 
     static List<Waterstand> estimateBergenTides(List<Waterstand> w1, List<Waterstand> w2) {
 
         ArrayList<Waterstand> bergen = new ArrayList<>();
 
         Waterstand t1, t2, t3;
+
+        Log.e("msg", "w1 ijmuiden is groot: " + w1.size() + " w2 is den helder is groot: " + w2.size());
+
         String jaar,datum,tijd,tide,val;
         int diff;
         for (int i = 0; i<w1.size(); i++) {
