@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
     public TextView prevtidetime, nowtidetime, nexttidetime;
     public TextView prevtidehight, nowtidehight, nexttidehight;
     public LinearLayout totaal;
+    public List<String> PLACES = Arrays.asList("Ijmuiden", "Bergen", "Den Helder", "Texel");
+    public int currentPlaceIndex = 0;
+    public String currentPlace;
+    public List<Waterstand> waterstanden, bergen, texel, ijmuiden, denhelder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,24 +32,56 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         identifyMainActivityFields();
+        loadTideDatainLists();
+        setTideDatainFields();
 
-        List<Waterstand> waterstanden = JSONfile.getWaterstanden(getApplicationContext(), "bergen");
-        List<Waterstand> ijmuiden = JSONfile.getWaterstanden(getApplicationContext(), "ijmuiden");
-        List<Waterstand> denhelder = JSONfile.getWaterstanden(getApplicationContext(), "denhelder");
-        List<Waterstand> texel = JSONfile.getWaterstanden(getApplicationContext(), "texel");
-        List<Waterstand> bergen = Tides.estimateBergenTides(ijmuiden, denhelder);
 
-        String plaats = "IJmuiden";
+        plaatsbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setTideDatainFields();            }
+        });
+
+    }
+
+    public void setTideDatainFields() {
+        if (currentPlaceIndex < PLACES.size()-1) {
+            currentPlaceIndex++;
+        }
+        else {
+            currentPlaceIndex = 0;
+        }
+        switch (currentPlaceIndex) {
+            case(0) :
+                currentPlace = "IJmuiden";
+                waterstanden = ijmuiden;
+                break;
+            case (1) :
+                currentPlace = "Bergen";
+                waterstanden = bergen;
+                break;
+            case(2) :
+                currentPlace = "Den Helder";
+                waterstanden = denhelder;
+                break;
+            case (3) :
+                currentPlace = "Texel";
+                waterstanden = texel;
+                break;
+        }
         String jaar = DatumTijd.getTodayYear();
-
         String dagString = DatumTijd.getDateString(DatumTijd.getToday());
         String tijdString = DatumTijd.getTimeString(DatumTijd.getTodayTime());
-
         int previousTideIndex = Tides.getPreviousTide(jaar, dagString, tijdString, ijmuiden);
         int nextTideIndex = previousTideIndex+1;
+        setActivityFields(waterstanden, jaar, currentPlace, dagString, tijdString, previousTideIndex, nextTideIndex);
+    }
 
-        setActivityFields(ijmuiden, jaar, plaats, dagString, tijdString, previousTideIndex, nextTideIndex);
-
+    public void loadTideDatainLists() {
+        ijmuiden = JSONfile.getWaterstanden(getApplicationContext(), "ijmuiden");
+        denhelder = JSONfile.getWaterstanden(getApplicationContext(), "denhelder");
+        texel = JSONfile.getWaterstanden(getApplicationContext(), "texel");
+        bergen = Tides.estimateBergenTides(ijmuiden, denhelder);
     }
 
 
