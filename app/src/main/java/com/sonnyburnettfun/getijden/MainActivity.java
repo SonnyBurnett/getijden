@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public TextView prevtidetime, nowtidetime, nexttidetime;
     public TextView prevtidehight, nowtidehight, nexttidehight;
     public LinearLayout totaal;
-    public List<String> PLACES = Arrays.asList("Ijmuiden", "Bergen", "Den Helder", "Texel");
+    public List<String> PLACES = Arrays.asList("IJmuiden", "Bergen", "Den Helder", "Texel");
     public int currentPlaceIndex = 0;
     public String currentPlace;
     public List<Waterstand> waterstanden, bergen, texel, ijmuiden, denhelder;
@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
         String jaar = DatumTijd.getTodayYear();
         String dagString = DatumTijd.getDateString(DatumTijd.getToday());
         String tijdString = DatumTijd.getTimeString(DatumTijd.getTodayTime());
-        int previousTideIndex = Tides.getPreviousTide(jaar, dagString, tijdString, ijmuiden);
+        int previousTideIndex = Tides.getPreviousTide(jaar, dagString, tijdString, waterstanden);
         int nextTideIndex = previousTideIndex+1;
-        setActivityFields(waterstanden, jaar, currentPlace, dagString, tijdString, previousTideIndex, nextTideIndex);
+        setActivityFields(jaar, dagString, tijdString, previousTideIndex, nextTideIndex);
     }
 
     public void loadTideDatainLists() {
@@ -105,11 +105,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setActivityFields(List<Waterstand> waterstanden, String jaar, String plaats, String dagString, String tijdString, int previousTideIndex, int nextTideIndex) {
-        plaatsbutton.setText(plaats);
-        plaatsbutton.setBackgroundColor(Color.parseColor("#f1948a"));
+    public void setActivityFields(String jaar, String dagString, String tijdString, int previousTideIndex, int nextTideIndex) {
+        plaatsbutton.setText(currentPlace);
         jaarbutton.setText(jaar);
-        jaarbutton.setBackgroundColor(Color.parseColor("#f1948a"));
+        String achtergrond = "#f1948a";
+        switch (currentPlaceIndex) {
+            case(0):
+                achtergrond = "#ba4a00";
+                break;
+            case (1) :
+                achtergrond = "#a93226";
+                break;
+            case(2):
+                achtergrond = "#e74c3c";
+                break;
+            case (3) :
+                achtergrond = "#641e16";
+                break;
+        }
+        plaatsbutton.setBackgroundColor(Color.parseColor(achtergrond));
+        jaarbutton.setBackgroundColor(Color.parseColor(achtergrond));
 
         totaal.setBackgroundColor(Color.parseColor("#839192"));
 

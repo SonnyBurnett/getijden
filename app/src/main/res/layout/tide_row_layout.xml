@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:orientation="horizontal"
+    android:padding="6dip" >
+
+
+    <TextView
+        android:id="@+id/jaar_veld"
+        android:layout_width="66dp"
+        android:layout_height="wrap_content"
+        android:text="jaar"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/datum_veld"
+        android:layout_width="74dp"
+        android:layout_height="wrap_content"
+        android:text="datum"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tijd_veld"
+        android:layout_width="82dp"
+        android:layout_height="wrap_content"
+        android:text="tijd"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tide_veld"
+        android:layout_width="63dp"
+        android:layout_height="wrap_content"
+        android:text="tide"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/val_veld"
+        android:layout_width="73dp"
+        android:layout_height="wrap_content"
+        android:text="val"
+        android:textSize="14sp" />
+
+</LinearLayout>
+
