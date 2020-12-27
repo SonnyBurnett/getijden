@@ -2,14 +2,18 @@ package com.sonnyburnettfun.getijden;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     public int currentPlaceIndex = 0;
     public String currentPlace;
     public List<Waterstand> waterstanden, bergen, texel, ijmuiden, denhelder;
+
+    public static final String EXTRA_NUMBER = "com.sonnyburnettfun.getijden.EXTRA_NUMBER";
 
 
     @Override
@@ -40,6 +46,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setTideDatainFields();            }
+        });
+
+        jaarbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String numberString = Integer.toString(currentPlaceIndex);
+
+                Intent intent = new Intent(MainActivity.this, TidesList.class);
+                intent.putExtra(EXTRA_NUMBER, numberString );
+                startActivity(intent);
+
+
+            }
         });
 
     }
@@ -82,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         denhelder = JSONfile.getWaterstanden(getApplicationContext(), "denhelder");
         texel = JSONfile.getWaterstanden(getApplicationContext(), "texel");
         bergen = Tides.estimateBergenTides(ijmuiden, denhelder);
+        String s = JSONfile.convertListOfObjectsToJSONstring(bergen);
     }
 
 

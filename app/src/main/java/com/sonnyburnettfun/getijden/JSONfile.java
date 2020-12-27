@@ -69,6 +69,14 @@ public class JSONfile {
 
     }
 
+    static String convertListOfObjectsToJSONstring(List<Waterstand> tides) {
+        Gson g = new Gson();
+        String s = g.toJson(tides);
+        Log.e("data", s);
+        Log.e("msg", "Hello World");
+        return s;
+    }
+
     static List<Waterstand> getWaterstanden(Context con, String plaats) {
         String fileNaam = "";
 

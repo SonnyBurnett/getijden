@@ -1,7 +1,10 @@
 package com.sonnyburnettfun.getijden;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -95,6 +98,7 @@ public class Tides {
         }
         return bergen;
     }
+
 
 
 }
