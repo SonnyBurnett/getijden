@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,41 +28,26 @@ public class TidesList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.all_tides_activity);
 
+        Log.e("msg", "De start van de TideList Activity");
+
         mTextViewPlace = findViewById(R.id.recycler_place);
 
         Intent intent = getIntent();
         List<Waterstand> mTides = new ArrayList<Waterstand>();
-        String indexText = intent.getStringExtra(MainActivity.EXTRA_NUMBER);
+        String placeName = intent.getStringExtra(MainActivity.SELECTED_PLACE);
+        mTextViewPlace.setText(placeName);
+        String tideListString = intent.getStringExtra(MainActivity.SELECTED_PLACE);
 
-        switch (indexText) {
-            case("0") :
-                Log.e("msg", "0 index is: " + indexText);
-                mTides = JSONfile.getWaterstanden(getApplicationContext(), "ijmuiden");
-                mTextViewPlace.setText("IJmuiden");
-                break;
-            case("1") :
-                Log.e("msg", "1 index is: " + indexText);
-                mTides = JSONfile.getWaterstanden(getApplicationContext(), "texel");
-                mTextViewPlace.setText("Bergen");
-                break;
-            case("2") :
-                Log.e("msg", "2 index is: " + indexText);
-                mTides = JSONfile.getWaterstanden(getApplicationContext(), "denhelder");
-                mTextViewPlace.setText("Den Helder");
-                break;
-            case("3") :
-                Log.e("msg", "3 index is: " + indexText);
-                mTides = JSONfile.getWaterstanden(getApplicationContext(), "texel");
-                mTextViewPlace.setText("Texel");
-                break;
-            default :
-                Log.e("msg", "default index is: " + indexText);
-                mTides = JSONfile.getWaterstanden(getApplicationContext(), "texel");
-                mTextViewPlace.setText("Texel");
-                break;
+        if (placeName.equals("Bergen")) {
+            List<Waterstand> ijmuiden, denhelder;
+            ijmuiden = JSONfile.getWaterstanden(getApplicationContext(), "IJmuiden");
+            denhelder = JSONfile.getWaterstanden(getApplicationContext(), "Den Helder");
+            mTides = Tides.estimateBergenTides(ijmuiden, denhelder);
+        }
+        else {
+            mTides = JSONfile.getWaterstanden(getApplicationContext(), tideListString);
         }
 
-        mTides = JSONfile.getWaterstanden(getApplicationContext(), "texel");
         int firstToShow = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             firstToShow = Tides.getIndexofFirstTide(mTides, DatumTijd.getDateString(LocalDate.now()));

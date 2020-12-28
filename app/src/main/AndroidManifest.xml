@@ -5,9 +5,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/beachicon"
-        android:label="@string/app_name"
-        android:roundIcon="@drawable/beachicon"
+        android:icon="@drawable/strand"
+        android:label="@string/app_title"
+        android:roundIcon="@drawable/strand"
         android:supportsRtl="true"
         android:theme="@style/Theme.Getijden"
         tools:ignore="ExtraText">

@@ -12,8 +12,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 
 
 //
@@ -55,6 +58,7 @@ public class JSONfile {
         JSONObject json= null;
 
         json = new JSONObject(jsonFileString);
+        //Log.e("msg", "JSON string as it should be: " + jsonFileString);
         array = json.getJSONArray("waterstanden"); /* eerste veld uit het JSON file!!!!! */
         Gson g = new Gson();
 
@@ -71,28 +75,43 @@ public class JSONfile {
 
     static String convertListOfObjectsToJSONstring(List<Waterstand> tides) {
         Gson g = new Gson();
-        String s = g.toJson(tides);
-        Log.e("data", s);
-        Log.e("msg", "Hello World");
-        return s;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(tides);
+        return json;
+    }
+
+    static List<Waterstand> convertJSONStringToListOfObjects(String jsonString) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<Waterstand> waterstanden = new ArrayList<>();
+
+        try {
+            waterstanden = mapper.readValue(jsonString, new TypeReference<List<Waterstand>>(){});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.e("msg", "waterstanden is groot: " + waterstanden.size());
+        return waterstanden;
+
+
     }
 
     static List<Waterstand> getWaterstanden(Context con, String plaats) {
         String fileNaam = "";
 
-        Log.e("msg", "plaats is: " + plaats);
+        Log.e("msg", "Start van get Waterstanden. plaats is: " + plaats);
 
         switch(plaats) {
-            case "bergen":
-                fileNaam = "getijden2020.json";
+            case "Bergen":
+                //fileNaam = "bergen2021.json";
                 break;
-            case "texel":
+            case "Texel":
                 fileNaam = "texel2021.json";
                 break;
-            case "ijmuiden":
+            case "IJmuiden":
                 fileNaam = "ijmuiden2021.json";
                 break;
-            case "denhelder":
+            case "Den Helder":
                 fileNaam = "denhelder2021.json";
                 break;
         }

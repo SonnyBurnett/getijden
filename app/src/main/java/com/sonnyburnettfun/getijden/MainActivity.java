@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,10 +24,10 @@ public class MainActivity extends AppCompatActivity {
     public LinearLayout totaal;
     public List<String> PLACES = Arrays.asList("IJmuiden", "Bergen", "Den Helder", "Texel");
     public int currentPlaceIndex = 0;
-    public String currentPlace;
+    public String currentPlace, currentFile;
     public List<Waterstand> waterstanden, bergen, texel, ijmuiden, denhelder;
 
-    public static final String EXTRA_NUMBER = "com.sonnyburnettfun.getijden.EXTRA_NUMBER";
+    public static final String SELECTED_PLACE = "com.sonnyburnettfun.getijden.SELECTED_PLACE";
 
 
     @Override
@@ -52,9 +50,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String numberString = Integer.toString(currentPlaceIndex);
+                String tidelistString = JSONfile.convertListOfObjectsToJSONstring(waterstanden);
 
                 Intent intent = new Intent(MainActivity.this, TidesList.class);
-                intent.putExtra(EXTRA_NUMBER, numberString );
+                intent.putExtra(SELECTED_PLACE, currentPlace );
                 startActivity(intent);
 
 
@@ -97,11 +96,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadTideDatainLists() {
-        ijmuiden = JSONfile.getWaterstanden(getApplicationContext(), "ijmuiden");
-        denhelder = JSONfile.getWaterstanden(getApplicationContext(), "denhelder");
-        texel = JSONfile.getWaterstanden(getApplicationContext(), "texel");
+        ijmuiden = JSONfile.getWaterstanden(getApplicationContext(), "IJmuiden");
+        denhelder = JSONfile.getWaterstanden(getApplicationContext(), "Den Helder");
+        texel = JSONfile.getWaterstanden(getApplicationContext(), "Texel");
         bergen = Tides.estimateBergenTides(ijmuiden, denhelder);
-        String s = JSONfile.convertListOfObjectsToJSONstring(bergen);
     }
 
 
@@ -110,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
         jaarbutton = findViewById(R.id.jaarbutton);
         dagbutton = findViewById(R.id.dagbutton);
         maandbutton = findViewById(R.id.maandbutton);
-        uurbutton = findViewById(R.id.uurbutton);
-        minuutbutton = findViewById(R.id.minuutbutton);
+        /*uurbutton = findViewById(R.id.uurbutton);
+        minuutbutton = findViewById(R.id.minuutbutton);*/
         plaatsbutton = findViewById(R.id.plaatsbutton);
         prevtidename = findViewById(R.id.tideprevname);
         nowtidename = findViewById(R.id.tidenowname);
@@ -149,14 +147,14 @@ public class MainActivity extends AppCompatActivity {
         totaal.setBackgroundColor(Color.parseColor("#839192"));
 
         dagbutton.setText(dagString.substring(2,4));
-        maandbutton.setText(dagString.substring(0,2));
-        uurbutton.setText(tijdString.substring(0,2));
-        minuutbutton.setText(tijdString.substring(2,4));
+        maandbutton.setText(DatumTijd.getMonthName(dagString.substring(0,2)));
+        /*uurbutton.setText(tijdString.substring(0,2));
+        minuutbutton.setText(tijdString.substring(2,4));*/
 
         dagbutton.setBackgroundColor(Color.parseColor("#839192"));
         maandbutton.setBackgroundColor(Color.parseColor("#839192"));
-        uurbutton.setBackgroundColor(Color.parseColor("#839192"));
-        minuutbutton.setBackgroundColor(Color.parseColor("#839192"));
+        /*uurbutton.setBackgroundColor(Color.parseColor("#839192"));
+        minuutbutton.setBackgroundColor(Color.parseColor("#839192"));*/
 
         if (waterstanden.get(previousTideIndex).tide.equals("HW")) {
             prevtidename.setBackgroundColor(Color.parseColor("#00c3ff"));
