@@ -1,5 +1,6 @@
 package com.sonnyburnettfun.getijden;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class TidesListAdapter extends RecyclerView.Adapter<TidesListViewHolder> 
     }
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(final TidesListViewHolder holder, final int position) {
         final Waterstand tide = tidesList.get(position);        // find the position in the list
@@ -30,20 +32,18 @@ public class TidesListAdapter extends RecyclerView.Adapter<TidesListViewHolder> 
         holder.tideTide.setText(tide.getTide());
         holder.tideVal.setText(tide.getVal());
         if (tide.getTide().equals("HW")) {
-            holder.tideJaar.setBackgroundColor(Color.parseColor("#00c3ff"));
-            holder.tideDatum.setBackgroundColor(Color.parseColor("#00c3ff"));
-            holder.tideTijd.setBackgroundColor(Color.parseColor("#00c3ff"));
-            holder.tideTide.setBackgroundColor(Color.parseColor("#00c3ff"));
-            holder.tideVal.setBackgroundColor(Color.parseColor("#00c3ff"));
-
-
+            holder.tideJaar.setBackgroundColor(R.color.vloedkleurlijst);
+            holder.tideDatum.setBackgroundColor(R.color.vloedkleurlijst);
+            holder.tideTijd.setBackgroundColor(R.color.vloedkleurlijst);
+            holder.tideTide.setBackgroundColor(R.color.vloedkleurlijst);
+            holder.tideVal.setBackgroundColor(R.color.vloedkleurlijst);
         }
         else {
-            holder.tideJaar.setBackgroundColor(Color.parseColor("#e0af1f"));
-            holder.tideDatum.setBackgroundColor(Color.parseColor("#e0af1f"));
-            holder.tideTijd.setBackgroundColor(Color.parseColor("#e0af1f"));
-            holder.tideTide.setBackgroundColor(Color.parseColor("#e0af1f"));
-            holder.tideVal.setBackgroundColor(Color.parseColor("#e0af1f"));
+            holder.tideJaar.setBackgroundColor(R.color.ebkleurlijst);
+            holder.tideDatum.setBackgroundColor(R.color.ebkleurlijst);
+            holder.tideTijd.setBackgroundColor(R.color.ebkleurlijst);
+            holder.tideTide.setBackgroundColor(R.color.ebkleurlijst);
+            holder.tideVal.setBackgroundColor(R.color.ebkleurlijst);
 
         }
     }
