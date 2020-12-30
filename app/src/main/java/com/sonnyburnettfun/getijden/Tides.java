@@ -1,10 +1,13 @@
 package com.sonnyburnettfun.getijden;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -65,27 +68,73 @@ public class Tides {
 
         Log.e("msg", "w1 ijmuiden is groot: " + w1.size() + " w2 is den helder is groot: " + w2.size());
 
-        String jaar,datum,tijd,tide,val;
-        int diff;
+        String jaar = "";
+        String datum = "";
+        String tijd = "";
+        String tide = "";
+        String val = "";
+        LocalDateTime ldt1 = null;
+        LocalDateTime ldt2 = null;
+        LocalDateTime newDateTime = null;
+        int diff = 0;
+        int verschil = 0;
+        int tmpMonth, tmpDay, tmpHour, tmpMinutes;
+        String monthString, dayString, hourString, minuteString;
+        int calculatedVerschil = 0;
         for (int i = 0; i<w1.size(); i++) {
             t1 = w1.get(i);
             t2 = w2.get(i);
-            jaar = t1.year;
-            diff = (int) ((DatumTijd.timeDiffinMinutes(t1.time, t2.time))/100)*40;
-
-            if (t1.date.equals(t2.date)) {
-                datum = t1.date;
-            }
-            else {
-                if (DatumTijd.isTimeNextDay(t1.time, diff))
-                    datum = t2.date;
-                else
-                    datum = t1.date;
+            ldt1 = DatumTijd.makeItLocalDateTime(t1.year,t1.date, t1.time);
+            ldt2 = DatumTijd.makeItLocalDateTime(t2.year,t2.date,t2.time);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                verschil = (int) ldt1.until(ldt2, ChronoUnit.MINUTES);
             }
 
-            tijd = DatumTijd.addMinutesToTime(t1.time, diff);
+            calculatedVerschil = (int) (verschil/100)*40;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                newDateTime = ldt1.plusMinutes(calculatedVerschil);
+                jaar = Integer.toString(newDateTime.getYear());
+                tmpMonth = newDateTime.getMonthValue();
+                tmpDay = newDateTime.getDayOfMonth();
+                if (Integer.toString(tmpMonth).length() == 1) {
+                    monthString = "0"+Integer.toString(tmpMonth);
+                }
+                else {
+                    monthString = Integer.toString(tmpMonth);
+                }
+
+                if (Integer.toString(tmpDay).length() == 1) {
+                    dayString = "0"+Integer.toString(tmpDay);
+                }
+                else {
+                    dayString = Integer.toString(tmpDay);
+                }
+                datum = monthString+dayString;
+
+                tmpHour = newDateTime.getHour();
+                tmpMinutes = newDateTime.getMinute();
+                if (Integer.toString(tmpHour).length() == 1) {
+                    hourString = "0"+Integer.toString(tmpHour);
+                }
+                else {
+                    hourString = Integer.toString(tmpHour);
+                }
+
+                if (Integer.toString(tmpMinutes).length() == 1) {
+                    minuteString = "0"+Integer.toString(tmpMinutes);
+                }
+                else {
+                    minuteString = Integer.toString(tmpMinutes);
+                }
+                tijd = hourString+minuteString;
+
+            }
+
+
             tide = t1.tide;
             val = Integer.toString(Integer.parseInt(t1.val)-11);
+
+            Log.e("data", jaar + " " + datum + " " + tijd + " " + tide + " " + val);
 
             t3 = new Waterstand(jaar, datum, tijd, tide, val);
 

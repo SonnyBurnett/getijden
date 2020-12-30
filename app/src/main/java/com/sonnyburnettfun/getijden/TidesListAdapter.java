@@ -32,18 +32,18 @@ public class TidesListAdapter extends RecyclerView.Adapter<TidesListViewHolder> 
         holder.tideTide.setText(tide.getTide());
         holder.tideVal.setText(tide.getVal());
         if (tide.getTide().equals("HW")) {
-            holder.tideJaar.setBackgroundColor(R.color.vloedkleurlijst);
-            holder.tideDatum.setBackgroundColor(R.color.vloedkleurlijst);
-            holder.tideTijd.setBackgroundColor(R.color.vloedkleurlijst);
-            holder.tideTide.setBackgroundColor(R.color.vloedkleurlijst);
-            holder.tideVal.setBackgroundColor(R.color.vloedkleurlijst);
+            holder.tideJaar.setBackgroundColor(Color.parseColor("#FFC107"));
+            holder.tideDatum.setBackgroundColor(Color.parseColor("#FFC107"));
+            holder.tideTijd.setBackgroundColor(Color.parseColor("#FFC107"));
+            holder.tideTide.setBackgroundColor(Color.parseColor("#FFC107"));
+            holder.tideVal.setBackgroundColor(Color.parseColor("#FFC107"));
         }
         else {
-            holder.tideJaar.setBackgroundColor(R.color.ebkleurlijst);
-            holder.tideDatum.setBackgroundColor(R.color.ebkleurlijst);
-            holder.tideTijd.setBackgroundColor(R.color.ebkleurlijst);
-            holder.tideTide.setBackgroundColor(R.color.ebkleurlijst);
-            holder.tideVal.setBackgroundColor(R.color.ebkleurlijst);
+            holder.tideJaar.setBackgroundColor(Color.parseColor("#03A9F4"));
+            holder.tideDatum.setBackgroundColor(Color.parseColor("#03A9F4"));
+            holder.tideTijd.setBackgroundColor(Color.parseColor("#03A9F4"));
+            holder.tideTide.setBackgroundColor(Color.parseColor("#03A9F4"));
+            holder.tideVal.setBackgroundColor(Color.parseColor("#03A9F4"));
 
         }
     }

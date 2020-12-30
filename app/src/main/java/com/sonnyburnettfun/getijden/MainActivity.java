@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         identifyMainActivityFields();
+
+        if (savedInstanceState != null) {
+            Log.e("msg", "HEEEEE Er is een davedInstanceState!");
+            currentPlaceIndex = savedInstanceState.getInt("PlaceIndex");
+        }
+
         loadTideDatainLists();
         setTideDatainFields();
 
@@ -60,6 +66,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("PlaceIndex", currentPlaceIndex);
+        savedInstanceState.putBoolean("MyBoolean", true);
+        savedInstanceState.putDouble("myDouble", 1.9);
+        savedInstanceState.putInt("MyInt", 1);
+        savedInstanceState.putString("MyString", "Welcome back to Android");
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
+        double myDouble = savedInstanceState.getDouble("myDouble");
+        int myInt = savedInstanceState.getInt("MyInt");
+        String myString = savedInstanceState.getString("MyString");
+        int myInt2 = savedInstanceState.getInt("PlaceIndex");
+        currentPlaceIndex = myInt2;
+        Log.e("msg", "we are in onRestoreInstanceState");
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                int result = data.getIntExtra("result", 0);
+            }
+        }
     }
 
     public void setTideDatainFields() {
