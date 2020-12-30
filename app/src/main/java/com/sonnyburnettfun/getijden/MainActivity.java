@@ -3,6 +3,7 @@ package com.sonnyburnettfun.getijden;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -24,10 +25,13 @@ public class MainActivity extends AppCompatActivity {
     public LinearLayout totaal;
     public List<String> PLACES = Arrays.asList("IJmuiden", "Bergen", "Den Helder", "Texel");
     public int currentPlaceIndex = 0;
-    public String currentPlace, currentFile;
+    public String currentPlace;
     public List<Waterstand> waterstanden, bergen, texel, ijmuiden, denhelder;
 
     public static final String SELECTED_PLACE = "com.sonnyburnettfun.getijden.SELECTED_PLACE";
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String NUMBER = "0";
+    private String saveNum;
 
 
     @Override
@@ -38,13 +42,12 @@ public class MainActivity extends AppCompatActivity {
         identifyMainActivityFields();
 
         if (savedInstanceState != null) {
-            Log.e("msg", "HEEEEE Er is een davedInstanceState!");
             currentPlaceIndex = savedInstanceState.getInt("PlaceIndex");
         }
 
         loadTideDatainLists();
+        loadData();
         setTideDatainFields();
-
 
         plaatsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(SELECTED_PLACE, currentPlace );
                 startActivity(intent);
 
-
             }
         });
 
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.e("msg", "onSaveInstanceState");
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("PlaceIndex", currentPlaceIndex);
         savedInstanceState.putBoolean("MyBoolean", true);
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.e("msg", "onRestoreInstanceState");
         super.onRestoreInstanceState(savedInstanceState);
         boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
         double myDouble = savedInstanceState.getDouble("myDouble");
@@ -88,6 +92,27 @@ public class MainActivity extends AppCompatActivity {
         int myInt2 = savedInstanceState.getInt("PlaceIndex");
         currentPlaceIndex = myInt2;
         Log.e("msg", "we are in onRestoreInstanceState");
+    }
+
+    public void saveData() {
+        Log.e("msg", " saveData");
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(NUMBER, Integer.toString(currentPlaceIndex));
+        editor.apply();
+    }
+    public void loadData() {
+        Log.e("msg", " loadData");
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        if (sharedPreferences.contains(NUMBER)) {
+            Log.e("msg", "sharedPreferences.contains(NUMBER) is waar");
+            if (!sharedPreferences.getString(NUMBER, "").equals(null)) {
+                Log.e("msg", "sharedPreferences.getString NUMBER is ook waar");
+                saveNum = sharedPreferences.getString(NUMBER, "");
+                currentPlaceIndex = (Integer.parseInt(saveNum))-1;
+                Log.e("msg", "Dus CurrentPlaceIndex is geladen " + currentPlaceIndex);
+            }
+        }
     }
 
 
@@ -102,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setTideDatainFields() {
+        Log.e("msg", "setTideDatainFields");
         if (currentPlaceIndex < PLACES.size()-1) {
             currentPlaceIndex++;
         }
@@ -132,9 +158,11 @@ public class MainActivity extends AppCompatActivity {
         int previousTideIndex = Tides.getPreviousTide(jaar, dagString, tijdString, waterstanden);
         int nextTideIndex = previousTideIndex+1;
         setActivityFields(jaar, dagString, tijdString, previousTideIndex, nextTideIndex);
+        saveData();
     }
 
     public void loadTideDatainLists() {
+        Log.e("msg", "oadTideDatainLists");
         ijmuiden = JSONfile.getWaterstanden(getApplicationContext(), "IJmuiden");
         denhelder = JSONfile.getWaterstanden(getApplicationContext(), "Den Helder");
         texel = JSONfile.getWaterstanden(getApplicationContext(), "Texel");
@@ -143,12 +171,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void identifyMainActivityFields() {
+        Log.e("msg", "identifyMainActivityFields");
         totaal = findViewById(R.id.totaal);
         jaarbutton = findViewById(R.id.jaarbutton);
         dagbutton = findViewById(R.id.dagbutton);
         maandbutton = findViewById(R.id.maandbutton);
-        /*uurbutton = findViewById(R.id.uurbutton);
-        minuutbutton = findViewById(R.id.minuutbutton);*/
         plaatsbutton = findViewById(R.id.plaatsbutton);
         prevtidename = findViewById(R.id.tideprevname);
         nowtidename = findViewById(R.id.tidenowname);
@@ -163,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void setActivityFields(String jaar, String dagString, String tijdString, int previousTideIndex, int nextTideIndex) {
+        Log.e("msg", "setActivityFields");
         plaatsbutton.setText(currentPlace);
         jaarbutton.setText(jaar);
         String achtergrond = "#f1948a";
@@ -187,13 +215,9 @@ public class MainActivity extends AppCompatActivity {
 
         dagbutton.setText(dagString.substring(2,4));
         maandbutton.setText(DatumTijd.getMonthName(dagString.substring(0,2)));
-        /*uurbutton.setText(tijdString.substring(0,2));
-        minuutbutton.setText(tijdString.substring(2,4));*/
 
         dagbutton.setBackgroundColor(Color.parseColor("#839192"));
         maandbutton.setBackgroundColor(Color.parseColor("#839192"));
-        /*uurbutton.setBackgroundColor(Color.parseColor("#839192"));
-        minuutbutton.setBackgroundColor(Color.parseColor("#839192"));*/
 
         if (waterstanden.get(previousTideIndex).tide.equals("HW")) {
             prevtidename.setBackgroundColor(Color.parseColor("#00c3ff"));

@@ -58,7 +58,6 @@ public class JSONfile {
         JSONObject json= null;
 
         json = new JSONObject(jsonFileString);
-        //Log.e("msg", "JSON string as it should be: " + jsonFileString);
         array = json.getJSONArray("waterstanden"); /* eerste veld uit het JSON file!!!!! */
         Gson g = new Gson();
 
@@ -99,7 +98,7 @@ public class JSONfile {
     static List<Waterstand> getWaterstanden(Context con, String plaats) {
         String fileNaam = "";
 
-        Log.e("msg", "Start van get Waterstanden. plaats is: " + plaats);
+        Log.e("msg", "We laden nu de data van " + plaats);
 
         switch(plaats) {
             case "Bergen":
@@ -115,8 +114,6 @@ public class JSONfile {
                 fileNaam = "denhelder2021.json";
                 break;
         }
-
-        Log.e("msg", "filenaam is: " + fileNaam);
 
         String jsonFileString = JSONfile.getJsonFromAssets(con, fileNaam);
 

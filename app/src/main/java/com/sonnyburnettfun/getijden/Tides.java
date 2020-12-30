@@ -134,7 +134,7 @@ public class Tides {
             tide = t1.tide;
             val = Integer.toString(Integer.parseInt(t1.val)-11);
 
-            Log.e("data", jaar + " " + datum + " " + tijd + " " + tide + " " + val);
+            //Log.e("data", jaar + " " + datum + " " + tijd + " " + tide + " " + val);
 
             t3 = new Waterstand(jaar, datum, tijd, tide, val);
 
