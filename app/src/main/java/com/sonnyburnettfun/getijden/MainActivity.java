@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public Button jaarbutton, dagbutton, maandbutton, uurbutton, minuutbutton, plaatsbutton;
+    public Button jaarbutton, dagbutton, maandbutton, plaatsbutton, helpbutton;
     public TextView prevtidename, nowtidename, nexttidename;
     public TextView prevtidetime, nowtidetime, nexttidetime;
     public TextView prevtidehight, nowtidehight, nexttidehight;
@@ -65,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(SELECTED_PLACE, currentPlace );
                 startActivity(intent);
 
+            }
+        });
+
+        helpbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, HelpTides.class);
+                startActivity(intent);
             }
         });
 
@@ -174,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("msg", "identifyMainActivityFields");
         totaal = findViewById(R.id.totaal);
         jaarbutton = findViewById(R.id.jaarbutton);
+        helpbutton = findViewById(R.id.helpbutton);
         dagbutton = findViewById(R.id.dagbutton);
         maandbutton = findViewById(R.id.maandbutton);
         plaatsbutton = findViewById(R.id.plaatsbutton);
@@ -210,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
         }
         plaatsbutton.setBackgroundColor(Color.parseColor(achtergrond));
         jaarbutton.setBackgroundColor(Color.parseColor(achtergrond));
+        helpbutton.setBackgroundColor(Color.parseColor( "#424949"));
 
         totaal.setBackgroundColor(Color.parseColor("#839192"));
 
