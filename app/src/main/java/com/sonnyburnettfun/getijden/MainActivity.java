@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
             prevtidename.setText("EB");
             nexttidename.setText("VLOED");
         }
-        int verschilEbenVloed = DatumTijd.timeDiffinMinutes(waterstanden.get(previousTideIndex).time, waterstanden.get(nextTideIndex).time);
+        int verschilEbenVloed = Math.abs(DatumTijd.timeDiffinMinutes(waterstanden.get(previousTideIndex).time, waterstanden.get(nextTideIndex).time));
         Log.e("msg","eb en vloed verschil: " + verschilEbenVloed);
         int verschilNuenVorige = DatumTijd.timeDiffinMinutes(waterstanden.get(previousTideIndex).time, tijdString);
         Log.e("msg", "vorige tij en nu verschil: " + verschilNuenVorige);

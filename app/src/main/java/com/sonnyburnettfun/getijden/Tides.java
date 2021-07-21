@@ -33,14 +33,19 @@ public class Tides {
     static int getPreviousTide(String jaar, String nuDatum, String nuTijd, List<Waterstand> tides) {
 
         int firstIndexDate = 0;
+        Log.e("msg", "get previous tide, year en datum zijn: " + jaar + " " + nuDatum);
 
         while (!tides.get(firstIndexDate).year.equals(jaar) && firstIndexDate < tides.size()) {
             firstIndexDate++;
         }
+        Log.e("msg", "get previous index scroll zolang jaar niet ok is, index is now: " + firstIndexDate);
 
         while (firstIndexDate < tides.size() && !tides.get(firstIndexDate).date.equals((nuDatum))) {
             firstIndexDate++;
         }
+
+        Log.e("msg", "get previous index scroll zolang dag niet ok is, index is now: " + firstIndexDate);
+
 
         while (DatumTijd.isTimeearlierThanTime(tides.get(firstIndexDate), DatumTijd.getTodayFull())) {
             Log.e("msg", tides.get(firstIndexDate).time + " is eerder dan " + nuTijd + " doorzoeken");

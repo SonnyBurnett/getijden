@@ -91,10 +91,27 @@ public class DatumTijd {
 
 
     static String getDateString(LocalDate datum) {
-        String nowMonth = null;
+        String nowMonth, nowDay = null;
+        int tmpMonth, tmpDay = 0;
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            nowMonth = Integer.toString(datum.getMonthValue());
-            String nowDay = Integer.toString(datum.getDayOfMonth());
+            tmpMonth = datum.getMonthValue();
+            tmpDay = datum.getDayOfMonth();
+
+            if (Integer.toString(tmpMonth).length() == 1) {
+                nowMonth = "0"+Integer.toString(tmpMonth);
+            }
+            else {
+                nowMonth = Integer.toString(tmpMonth);
+            }
+
+            if (Integer.toString(tmpDay).length() == 1) {
+                nowDay = "0"+Integer.toString(tmpDay);
+            }
+            else {
+                nowDay = Integer.toString(tmpDay);
+            }
+
             return nowMonth+nowDay;
         }
         return null;
